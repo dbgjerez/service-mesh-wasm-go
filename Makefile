@@ -3,28 +3,34 @@ IMAGE ?= service-mesh-wasm-go
 VERSION ?= 0.1-SNAPSHOT
 MAIN ?= main.go
 CONTAINER ?= container/Dockerfile
+.DEFAULT_GOAL := help
 
-.PHONY: build
-build: 
+.PHONY: help 
+help: ## Show opstions and short description
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+.PHONY: build 
+build: ## Build the golang application and generate .wasm module
 	@find ./src -type f -name ${MAIN} | xargs -Ip tinygo build -o p.wasm -scheduler=none -target=wasi p
 
 .PHONY: container
-image: clean build
-	mkdir .build.tmp
-	cp src/main.go.wasm .build.tmp/
-	cp container/manifest.yaml .build.tmp/
-	cd .build.tmp/
-	podman build -t ${HUB}/${IMAGE}:${VERSION} . -f ${CONTAINER}
+image: clean build ## Clean, build and generate the container image with the wasm module
+	@mkdir .build.tmp
+	@cp src/main.go.wasm .build.tmp/
+	@cp container/manifest.yaml .build.tmp/
+	@cd .build.tmp/
+	@podman build -t ${HUB}/${IMAGE}:${VERSION} . -f ${CONTAINER}
 
 .PHONY: clean
-clean: 
-	rm -rf .build.tmp
+clean: # Remove temporal files and .wasm module
+	@rm -rf .build.tmp
+	@find ./src -type f -name *wasm | xargs rm -f
 
 .PHONY: install
-install: 
-	go mod edit -require=github.com/tetratelabs/proxy-wasm-go-sdk@main
-	go mod download github.com/tetratelabs/proxy-wasm-go-sdk
+install: ## Install golang requires modules
+	@go mod edit -require=github.com/tetratelabs/proxy-wasm-go-sdk@main
+	@go mod download github.com/tetratelabs/proxy-wasm-go-sdk
 
 .PHONY: init
-init: 
-	go mod init ${IMAGE}
+init: ## Init the golang module the first time
+	@go mod init ${IMAGE}
