@@ -21,6 +21,10 @@ image: clean build ## Clean, build and generate the container image with the was
 	@cd .build.tmp/
 	@podman build -t ${HUB}/${IMAGE}:${VERSION} . -f ${CONTAINER}
 
+.PHONY: container 
+image-push: image ## Clean, build, generate the image and upload it
+	podman push ${HUB}/${IMAGE}:${VERSION}
+
 .PHONY: clean
 clean: # Remove temporal files and .wasm module
 	@rm -rf .build.tmp
