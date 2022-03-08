@@ -1,8 +1,8 @@
 schemaVersion: 1
-  
-name: service-mesh-wasm-go
-description: Removes headers
+
+name: ossm-wasmgo
+description: Log headers
 version: 1.0.0
-phase: PreAuthZ
+phase: PostAuthZ
 priority: 100
 module: extension.wasm

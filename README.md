@@ -1,5 +1,7 @@
 # Openshift Service Mesh extensibility
 
+> **NOTE** You can override the values of Makefile with an environment file called .env
+
 ```zsh
 ❯ make help
 build                          Build the golang application and generate .wasm module
