@@ -1,6 +1,5 @@
 # Openshift Service Mesh extensibility
 
-
 > **NOTE** You can override the values of Makefile with an environment file called .env
 
 ```zsh
