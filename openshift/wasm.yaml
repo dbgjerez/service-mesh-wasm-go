@@ -1,0 +1,13 @@
+apiVersion: maistra.io/v1
+kind: ServiceMeshExtension
+metadata:
+  name: ossm-wasmgo
+  namespace: istio-system
+spec:
+  workloadSelector:
+    labels:
+      app: test
+  config: {}
+  image: b0rr3g0/ossm-wasmgo:0.1
+  phase: PostAuthZ
+  priority: 100
