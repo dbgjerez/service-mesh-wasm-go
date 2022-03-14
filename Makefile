@@ -14,7 +14,7 @@ help: ## Show opstions and short description
 
 .PHONY: build 
 build: ## Build the golang application and generate .wasm module
-	@find ./src -type f -name ${MAIN} | xargs -Ip tinygo build -o src/extension.wasm -scheduler=none p
+	@find ./src -type f -name ${MAIN} | xargs -Ip tinygo build -o src/extension.wasm -scheduler=none -target=wasi p
 
 .PHONY: container
 image: clean build ## Clean, build and generate the container image with the wasm module
