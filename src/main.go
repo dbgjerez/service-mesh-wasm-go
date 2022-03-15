@@ -36,33 +36,31 @@ type httpHeaders struct {
 
 // Override types.DefaultPluginContext.
 func (ctx *pluginContext) OnPluginStart(pluginConfigurationSize int) types.OnPluginStartStatus {
-	proxywasm.LogInfo("OnPluginStart from Go!" + time.Now().GoString())
+	proxywasm.LogInfof("OnPluginStart from Go!" + time.Now().GoString())
 
 	return types.OnPluginStartStatusOK
 }
 
 func (ctx *httpHeaders) OnHttpRequestHeaders(numHeaders int, endOfStream bool) types.Action {
-	proxywasm.LogErrorf("OnHttpRequestHeaders")
-	proxywasm.LogErrorf("Headers: %s", numHeaders)
+	proxywasm.LogInfof("OnHttpRequestHeaders")
 	hs, err := proxywasm.GetHttpRequestHeaders()
 	if err != nil {
 		proxywasm.LogCriticalf("Failed to get request headers: %v", err)
 	}
 	for _, header := range hs {
-		proxywasm.LogErrorf("Request header <-- %s: %s", header[0], header[1])
+		proxywasm.LogInfof("Request header <-- %s: %s", header[0], header[1])
 	}
 	return types.ActionContinue
 }
 
 func (ctx *httpHeaders) OnHttpResponseHeaders(numHeaders int, endOfStream bool) types.Action {
-	proxywasm.LogErrorf("OnHttpResponseHeaders")
-	proxywasm.LogInfof("Headers: %s", numHeaders)
+	proxywasm.LogInfof("OnHttpResponseHeaders")
 	hs, err := proxywasm.GetHttpResponseHeaders()
 	if err != nil {
 		proxywasm.LogCriticalf("Failed to get request headers: %v", err)
 	}
 	for _, header := range hs {
-		proxywasm.LogErrorf("Response header <-- %s: %s", header[0], header[1])
+		proxywasm.LogInfof("Response header <-- %s: %s", header[0], header[1])
 	}
 	return types.ActionContinue
 }

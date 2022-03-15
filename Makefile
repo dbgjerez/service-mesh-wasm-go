@@ -37,7 +37,9 @@ clean: # Remove temporal files and .wasm module
 install: ## Install golang requires modules
 	@go mod edit -require=github.com/tetratelabs/proxy-wasm-go-sdk@main
 	@go mod download github.com/tetratelabs/proxy-wasm-go-sdk
+	@go mod download github.com/stretchr/testify
+	@go mod tidy
 
 .PHONY: init
 init: ## Init the golang module the first time
-	@go mod init ${IMAGE}
+	@go mod init service-mesh-wasm-go
