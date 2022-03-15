@@ -42,12 +42,27 @@ func (ctx *pluginContext) OnPluginStart(pluginConfigurationSize int) types.OnPlu
 }
 
 func (ctx *httpHeaders) OnHttpRequestHeaders(numHeaders int, endOfStream bool) types.Action {
-	h, err := proxywasm.GetHttpRequestHeaders()
+	proxywasm.LogErrorf("OnHttpRequestHeaders")
+	proxywasm.LogErrorf("Headers: %s", numHeaders)
+	hs, err := proxywasm.GetHttpRequestHeaders()
 	if err != nil {
 		proxywasm.LogCriticalf("Failed to get request headers: %v", err)
 	}
-	for range h {
-		proxywasm.LogInfof("Request header <-- %s: %s", h[0], h[1])
+	for _, header := range hs {
+		proxywasm.LogErrorf("Request header <-- %s: %s", header[0], header[1])
+	}
+	return types.ActionContinue
+}
+
+func (ctx *httpHeaders) OnHttpResponseHeaders(numHeaders int, endOfStream bool) types.Action {
+	proxywasm.LogErrorf("OnHttpResponseHeaders")
+	proxywasm.LogInfof("Headers: %s", numHeaders)
+	hs, err := proxywasm.GetHttpResponseHeaders()
+	if err != nil {
+		proxywasm.LogCriticalf("Failed to get request headers: %v", err)
+	}
+	for _, header := range hs {
+		proxywasm.LogErrorf("Response header <-- %s: %s", header[0], header[1])
 	}
 	return types.ActionContinue
 }
