@@ -1,4 +1,5 @@
 .build.tmp
 *wasm.env
 .env
-*wasm.vscode
+*wasm
+.vscode
